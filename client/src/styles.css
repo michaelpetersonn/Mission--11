@@ -1,0 +1,75 @@
+:root {
+  font-family: "Avenir Next", "Segoe UI", sans-serif;
+  color: #1f2933;
+  background:
+    radial-gradient(circle at top, rgba(255, 214, 165, 0.55), transparent 30%),
+    linear-gradient(180deg, #f6efe5 0%, #e8edf2 100%);
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+.app-shell {
+  min-height: 100vh;
+}
+
+.hero-card,
+.controls-card,
+.table-card,
+.pagination-card {
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(31, 41, 51, 0.08);
+  border-radius: 24px;
+  box-shadow: 0 24px 60px rgba(31, 41, 51, 0.08);
+  backdrop-filter: blur(10px);
+}
+
+.hero-card {
+  padding: 2rem;
+}
+
+.controls-card,
+.pagination-card {
+  padding: 1.5rem;
+}
+
+.table-card {
+  overflow: hidden;
+}
+
+.table thead th {
+  background: #1f2933;
+  color: #fff;
+  border-bottom: 0;
+  white-space: nowrap;
+}
+
+.table tbody tr:nth-child(even) {
+  background: rgba(232, 237, 242, 0.45);
+}
+
+.table tbody td {
+  vertical-align: middle;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.8rem;
+  color: #a05a2c;
+}
+
+.sort-button {
+  min-width: 150px;
+}
+
+@media (max-width: 768px) {
+  .hero-card,
+  .controls-card,
+  .pagination-card {
+    padding: 1.25rem;
+  }
+}

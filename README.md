@@ -4,104 +4,86 @@ Name: Michael Peterson
 Course: IS 413
 
 ## Overview
-Mission 11 builds an online bookstore app using an ASP.NET Core Web API + React front end backed by a SQLite database.
+Mission 11 is now set up as an ASP.NET Core Web API backend plus a Vite + React frontend backed by the provided SQLite database.
 
 ## Requirements (Checklist)
-- [ ] Create a web app for an online bookstore.
-- [ ] Store these fields for each book:
-  - [ ] Title
-  - [ ] Author
-  - [ ] Publisher
-  - [ ] ISBN
-  - [ ] Classification/Category
-  - [ ] Number of Pages
-  - [ ] Price
-- [ ] Connect the provided SQLite database to the app (`Bookstore.sqlite`).
-- [ ] Ensure models match the database tables (database is prepopulated).
-- [ ] Build a component/page that lists books from the database.
-- [ ] Add pagination:
-  - [ ] Default to 5 books per page.
-  - [ ] Allow the user to change the number of results per page.
-- [ ] Style the component using Bootstrap.
-- [ ] Add sorting by book title (AI assistance allowed).
+- [x] Create a web app for an online bookstore.
+- [x] Store these fields for each book: Title, Author, Publisher, ISBN, Classification, Category, PageCount, Price.
+- [x] Connect the provided SQLite database to the app (`Bookstore.sqlite`).
+- [x] Ensure models match the database table structure.
+- [x] Build a component/page that lists books from the database.
+- [x] Add pagination with a default page size of 5.
+- [x] Allow the user to change the number of results per page.
+- [x] Style the frontend with Bootstrap.
+- [x] Add sorting by book title.
+- [ ] Submit the GitHub repository link in Learning Suite.
 
 ## Database
 This repo includes the provided database file: `Bookstore.sqlite`.
 
-## Step-by-Step Guide
-These steps assume a typical setup: **ASP.NET Core Web API** for the backend + **React** for the frontend, using the provided **SQLite** database.
+## Project Structure
+- `Bookstore.sqlite` contains the provided `Books` table and seed data.
+- `BookstoreApi/` contains the .NET backend.
+- `client/` contains the Vite + React frontend.
 
-### 1) Create the projects
-- Create a backend project (example):
-  - `mkdir server && cd server`
-  - `dotnet new webapi -n BookstoreApi`
-- Create a React project (example with Vite):
-  - `cd ..`
-  - `npm create vite@latest client -- --template react`
-
-### 2) Connect the SQLite database (backend)
-- Copy `Bookstore.sqlite` into the backend project folder (example: `server/BookstoreApi/`).
-- Add EF Core packages:
-  - `dotnet add package Microsoft.EntityFrameworkCore.Sqlite`
-  - `dotnet add package Microsoft.EntityFrameworkCore.Design`
-  - `dotnet add package Microsoft.EntityFrameworkCore.Tools`
-- Add a connection string in `appsettings.json` (example):
-  - `Data Source=Bookstore.sqlite`
-- Scaffold your models + DbContext from the existing database (from the backend project folder that contains `Bookstore.sqlite`):
-  - `dotnet ef dbcontext scaffold "Data Source=Bookstore.sqlite" Microsoft.EntityFrameworkCore.Sqlite -o Models -c BookstoreContext --context-dir Data --use-database-names --no-onconfiguring`
-- Register the DbContext in `Program.cs` (so controllers can query the DB).
-
-### 3) Build the API endpoint(s)
-- Create an endpoint to return books with pagination + sorting (example):
+## Backend
+- The API project is `BookstoreApi`.
+- EF Core connects directly to `../Bookstore.sqlite`, so the database stays at the repo root.
+- The main endpoint is:
   - `GET /api/books?page=1&pageSize=5&sort=title`
-- Return both:
-  - The current page of books
-  - Metadata needed for pagination (at least `totalCount`, and/or `totalPages`)
-- Implement pagination in the query:
-  - `Skip((page - 1) * pageSize).Take(pageSize)`
-- Implement sorting by title in the query:
-  - `.OrderBy(b => b.Title)` (or the correct property name from your scaffolded model)
+- Supported sort values:
+  - `title`
+  - `title_desc`
+- Response includes:
+  - `books`
+  - `totalCount`
+  - `currentPage`
+  - `pageSize`
+  - `totalPages`
 
-### 4) Enable CORS (backend)
-- Allow your React dev server origin (commonly `http://localhost:5173` for Vite, or `http://localhost:3000` for CRA).
-- Add a simple CORS policy in `Program.cs` and apply it.
+## Frontend
+- The frontend is a Vite React app in `client/`.
+- Bootstrap is used for layout and component styling.
+- The UI supports:
+  - Book table display
+  - Sorting by title
+  - Page size selection
+  - Previous/next pagination
+- The frontend calls the API at:
+  - `http://localhost:5074`
+- You can override that with:
+  - `VITE_API_BASE_URL`
 
-### 5) Build the React UI (frontend)
-- Install Bootstrap:
-  - `npm install bootstrap`
-- Import Bootstrap CSS in `client/src/main.jsx` (or equivalent):
-  - `import "bootstrap/dist/css/bootstrap.min.css";`
-- Create a book list page/component that:
-  - Fetches data from the API
-  - Displays the required fields (Title, Author, etc.)
-  - Shows pagination controls
-  - Lets the user pick `pageSize` (default 5)
-  - Lets the user sort by title (button/toggle or clickable column header)
-
-### 6) Verify requirements end-to-end
-- Confirm the DB is being used (you should see prepopulated books).
-- Confirm:
-  - Page size defaults to 5
-  - Changing page size refetches + updates results
-  - Pagination works for multiple pages
-  - Sorting by title changes order
-  - Styling uses Bootstrap components/classes
-
-### 7) Submit
-- Push to GitHub.
-- Submit the GitHub repo link in Learning Suite.
+## Steps to Complete the Assignment
+1. Open a terminal in `BookstoreApi/` and run `dotnet restore`.
+2. Start the backend with `dotnet run`.
+3. Open a second terminal in `client/` and run `npm install`.
+4. Start the frontend with `npm run dev`.
+5. Open the Vite URL shown in the terminal, usually `http://localhost:5173`.
+6. Confirm the page loads books from the SQLite database.
+7. Verify the default page size is 5.
+8. Change the results-per-page dropdown and confirm the table updates.
+9. Click the sort button and confirm titles switch between ascending and descending order.
+10. Test the Previous and Next buttons across multiple pages.
+11. If needed, update styling or text to match your professor's expectations.
+12. Push the finished project to GitHub and submit that repo link in Learning Suite.
 
 ## Running the App
-Once the API and React app are in place, run them from their respective folders:
-
-- API (example):
+- Backend:
+  - `cd BookstoreApi`
   - `dotnet restore`
   - `dotnet run`
-- Client (example):
+- Frontend:
+  - `cd client`
   - `npm install`
-  - `npm start`
+  - `npm run dev`
 
-If your project uses different commands (Vite, `npm run dev`, etc.), update this section accordingly.
+Vite typically runs at `http://localhost:5173`, and the API runs at `http://localhost:5074`.
+
+## Notes
+- `npm run build` succeeds for the frontend.
+- `dotnet build` succeeds for the backend.
+- Vite warns about the `#` character in the folder name `Water Project #1`; the app still builds, but renaming the parent folder would remove that warning.
 
 ## Submission
 Submit a link to the GitHub repository for this assignment in Learning Suite.
