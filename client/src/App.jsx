@@ -65,6 +65,8 @@ function App() {
     setPage(1);
   };
 
+  const pageNumbers = Array.from({ length: totalPages }, (_, index) => index + 1);
+
   return (
     <main className="app-shell">
       <div className="container py-5">
@@ -156,7 +158,7 @@ function App() {
               Page {page} of {totalPages}
             </p>
 
-            <div className="d-flex gap-2">
+            <div className="d-flex flex-wrap gap-2 justify-content-md-end">
               <button
                 className="btn btn-outline-dark"
                 onClick={() => setPage((currentPage) => Math.max(currentPage - 1, 1))}
@@ -164,6 +166,18 @@ function App() {
               >
                 Previous
               </button>
+
+              {pageNumbers.map((pageNumber) => (
+                <button
+                  key={pageNumber}
+                  className={`btn ${pageNumber === page ? "btn-dark" : "btn-outline-dark"}`}
+                  onClick={() => setPage(pageNumber)}
+                  disabled={isLoading}
+                >
+                  {pageNumber}
+                </button>
+              ))}
+
               <button
                 className="btn btn-outline-dark"
                 onClick={() =>
