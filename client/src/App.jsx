@@ -73,10 +73,6 @@ function App() {
         <section className="hero-card mb-4">
           <p className="eyebrow">IS 413 Mission 11</p>
           <h1 className="display-5 fw-semibold">Online Bookstore Catalog</h1>
-          <p className="lead mb-0">
-            Browse the bookstore inventory with title sorting, adjustable page
-            size, and server-side pagination backed by SQLite.
-          </p>
         </section>
 
         <section className="controls-card mb-4">
