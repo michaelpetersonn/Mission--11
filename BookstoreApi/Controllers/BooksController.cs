@@ -21,6 +21,11 @@ public class BooksController(BookstoreContext context) : ControllerBase
         };
 
         IQueryable<Book> booksQuery = context.Books.AsNoTracking();
+        if (!string.IsNullOrWhiteSpace(query.Category))
+        {
+            var category = query.Category.Trim();
+            booksQuery = booksQuery.Where(book => book.Category == category);
+        }
 
         booksQuery = query.Sort.ToLowerInvariant() switch
         {
@@ -42,5 +47,19 @@ public class BooksController(BookstoreContext context) : ControllerBase
             PageSize = pageSize,
             TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize)
         });
+    }
+
+    [HttpGet("categories")]
+    public async Task<ActionResult<IReadOnlyList<string>>> GetCategories()
+    {
+        var categories = await context.Books
+            .AsNoTracking()
+            .Select(book => book.Category)
+            .Where(category => !string.IsNullOrWhiteSpace(category))
+            .Distinct()
+            .OrderBy(category => category)
+            .ToListAsync();
+
+        return Ok(categories);
     }
 }
