@@ -168,6 +168,20 @@ function App() {
 
   return (
     <main className="app-shell">
+
+      {/* Note to the TA. These are the special bootstrap attributes that I used in this project. - Michael Peterson 
+
+          1) Grid layout: container, row, col-12, col-xl-9, col-xl-3, col-lg-10
+
+          2) Additional Bootstrap features:
+             - Navbar: navbar, navbar-expand-lg, navbar-dark, bg-dark
+             - Badge: badge, rounded-pill, text-bg-warning (cart count)
+             - Card: card, card-body (cart summary panel)
+             - Alert: alert, alert-danger, alert-info
+             - Buttons/Table utilities: btn, btn-outline-dark, table, table-responsive
+      */}
+
+
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
         <div className="container">
           <a className="navbar-brand fw-semibold" href="#/">
