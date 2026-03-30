@@ -3,8 +3,26 @@ import { useEffect, useState } from "react";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:5074";
 const PAGE_SIZE_OPTIONS = [5, 10, 15, 20];
 
+interface Book {
+  bookId: number;
+  title: string;
+  author: string;
+  publisher: string;
+  isbn: string;
+  classification: string;
+  category: string;
+  pageCount: number;
+  price: number;
+}
+
+interface BooksResponse {
+  books: Book[];
+  totalPages: number;
+  totalCount: number;
+}
+
 function App() {
-  const [books, setBooks] = useState([]);
+  const [books, setBooks] = useState<Book[]>([]);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const [sort, setSort] = useState("title");
@@ -35,13 +53,13 @@ function App() {
           throw new Error("Failed to load books from the API.");
         }
 
-        const data = await response.json();
+        const data: BooksResponse = await response.json();
         setBooks(data.books);
         setTotalPages(data.totalPages);
         setTotalCount(data.totalCount);
       } catch (loadError) {
-        if (loadError.name !== "AbortError") {
-          setError(loadError.message);
+        if ((loadError as Error).name !== "AbortError") {
+          setError((loadError as Error).message);
         }
       } finally {
         if (!controller.signal.aborted) {
@@ -60,7 +78,7 @@ function App() {
     setSort((currentSort) => (currentSort === "title" ? "title_desc" : "title"));
   };
 
-  const handlePageSizeChange = (event) => {
+  const handlePageSizeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setPageSize(Number(event.target.value));
     setPage(1);
   };
@@ -125,7 +143,7 @@ function App() {
               <tbody>
                 {isLoading ? (
                   <tr>
-                    <td colSpan="8" className="text-center py-5">
+                    <td colSpan={8} className="text-center py-5">
                       Loading books...
                     </td>
                   </tr>
