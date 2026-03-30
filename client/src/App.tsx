@@ -4,7 +4,28 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:5074
 const PAGE_SIZE_OPTIONS = [5, 10, 15, 20];
 const CART_STORAGE_KEY = "mission12-cart";
 
-function readCartFromStorage() {
+interface Book {
+  bookId: number;
+  title: string;
+  author: string;
+  category: string;
+  price: number;
+}
+
+interface CartItem {
+  bookId: number;
+  title: string;
+  price: number;
+  quantity: number;
+}
+
+interface BooksResponse {
+  books: Book[];
+  totalPages: number;
+  totalCount: number;
+}
+
+function readCartFromStorage(): CartItem[] {
   try {
     const storedCart = localStorage.getItem(CART_STORAGE_KEY);
     return storedCart ? JSON.parse(storedCart) : [];
@@ -13,13 +34,13 @@ function readCartFromStorage() {
   }
 }
 
-function formatCurrency(value) {
+function formatCurrency(value: number): string {
   return Number(value).toFixed(2);
 }
 
 function App() {
-  const [books, setBooks] = useState([]);
-  const [categories, setCategories] = useState([]);
+  const [books, setBooks] = useState<Book[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const [sort, setSort] = useState("title");
@@ -28,7 +49,7 @@ function App() {
   const [totalCount, setTotalCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
-  const [cartItems, setCartItems] = useState(readCartFromStorage);
+  const [cartItems, setCartItems] = useState<CartItem[]>(readCartFromStorage);
   const [route, setRoute] = useState(window.location.hash === "#/cart" ? "cart" : "home");
 
   useEffect(() => {
@@ -57,11 +78,11 @@ function App() {
           throw new Error("Failed to load categories.");
         }
 
-        const data = await response.json();
+        const data: string[] = await response.json();
         setCategories(data);
       } catch (loadError) {
-        if (loadError.name !== "AbortError") {
-          setError(loadError.message);
+        if ((loadError as Error).name !== "AbortError") {
+          setError((loadError as Error).message);
         }
       }
     }
@@ -97,13 +118,13 @@ function App() {
           throw new Error("Failed to load books from the API.");
         }
 
-        const data = await response.json();
+        const data: BooksResponse = await response.json();
         setBooks(data.books);
         setTotalPages(Math.max(data.totalPages, 1));
         setTotalCount(data.totalCount);
       } catch (loadError) {
-        if (loadError.name !== "AbortError") {
-          setError(loadError.message);
+        if ((loadError as Error).name !== "AbortError") {
+          setError((loadError as Error).message);
         }
       } finally {
         if (!controller.signal.aborted) {
@@ -134,17 +155,17 @@ function App() {
     setSort((currentSort) => (currentSort === "title" ? "title_desc" : "title"));
   };
 
-  const handlePageSizeChange = (event) => {
+  const handlePageSizeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setPageSize(Number(event.target.value));
     setPage(1);
   };
 
-  const handleCategoryChange = (event) => {
+  const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedCategory(event.target.value);
     setPage(1);
   };
 
-  const addToCart = (book) => {
+  const addToCart = (book: Book) => {
     setCartItems((currentCartItems) => {
       const existingItem = currentCartItems.find((item) => item.bookId === book.bookId);
 
@@ -169,7 +190,7 @@ function App() {
   return (
     <main className="app-shell">
 
-      {/* Note to the TA. These are the special bootstrap attributes that I used in this project. - Michael Peterson 
+      {/* Note to the TA. These are the special bootstrap attributes that I used in this project. - Michael Peterson
 
           1) Grid layout: container, row, col-12, col-xl-9, col-xl-3, col-lg-10
 
@@ -277,13 +298,13 @@ function App() {
                     <tbody>
                       {isLoading ? (
                         <tr>
-                          <td colSpan="5" className="text-center py-5">
+                          <td colSpan={5} className="text-center py-5">
                             Loading books...
                           </td>
                         </tr>
                       ) : books.length === 0 ? (
                         <tr>
-                          <td colSpan="5" className="text-center py-5">
+                          <td colSpan={5} className="text-center py-5">
                             No books match this category.
                           </td>
                         </tr>
