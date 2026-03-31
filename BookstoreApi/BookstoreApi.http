@@ -1,6 +1,52 @@
-@BookstoreApi_HostAddress = http://localhost:0
+@BookstoreApi_HostAddress = http://localhost:5074
 
-GET {{BookstoreApi_HostAddress}}/weatherforecast/
+### GET all books (page 1)
+GET {{BookstoreApi_HostAddress}}/api/books
 Accept: application/json
 
 ###
+
+### GET categories
+GET {{BookstoreApi_HostAddress}}/api/books/categories
+Accept: application/json
+
+###
+
+### POST - Add a new book
+POST {{BookstoreApi_HostAddress}}/api/books
+Content-Type: application/json
+
+{
+  "bookId": 0,
+  "title": "Test Book",
+  "author": "Test Author",
+  "publisher": "Test Publisher",
+  "isbn": "123-4567890123",
+  "classification": "Fiction",
+  "category": "Mystery",
+  "pageCount": 300,
+  "price": 14.99
+}
+
+###
+
+### PUT - Update a book (replace 1 with the bookId returned from POST)
+PUT {{BookstoreApi_HostAddress}}/api/books/1
+Content-Type: application/json
+
+{
+  "bookId": 1,
+  "title": "Updated Title",
+  "author": "Updated Author",
+  "publisher": "Updated Publisher",
+  "isbn": "123-4567890123",
+  "classification": "Fiction",
+  "category": "Mystery",
+  "pageCount": 350,
+  "price": 19.99
+}
+
+###
+
+### DELETE - Delete a book (replace 1 with the bookId to delete)
+DELETE {{BookstoreApi_HostAddress}}/api/books/1
