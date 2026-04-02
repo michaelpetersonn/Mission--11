@@ -47,6 +47,7 @@
 /Users/michaelpeterson/mission 11/BookstoreApi/publish/BuildHost-netcore/zh-Hant/System.CommandLine.resources.dll
 /Users/michaelpeterson/mission 11/BookstoreApi/publish/appsettings.Development.json
 /Users/michaelpeterson/mission 11/BookstoreApi/publish/appsettings.json
+/Users/michaelpeterson/mission 11/BookstoreApi/publish/Bookstore.sqlite
 /Users/michaelpeterson/mission 11/BookstoreApi/publish/BookstoreApi.dll
 /Users/michaelpeterson/mission 11/BookstoreApi/publish/BookstoreApi.runtimeconfig.json
 /Users/michaelpeterson/mission 11/BookstoreApi/publish/BookstoreApi.pdb
